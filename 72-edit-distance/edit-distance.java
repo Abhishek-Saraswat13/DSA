@@ -1,29 +1,24 @@
 class Solution {
     int m,n;
-    int[][] dp=new int[501][501];
     public int minDistance(String s1, String s2) {
-        m=s1.length();
-        n=s2.length();
+        int m=s1.length();
+        int n=s2.length();
+
+        int[][] t=new int[m+1][n+1];
+
         for(int i=0;i<=m;i++){
-            Arrays.fill(dp[i],-1);
-        }
+            for(int j=0;j<=n;j++){
+                if(i==0 || j==0) t[i][j]=i+j;
 
-        return solve(s1,s2,m,n);
-    }
-    public int solve(String s1,String s2,int m,int n){
-        if(m==0 || n==0) return m+n;
-        
-        if(dp[m][n]!=-1) return dp[m][n];
-        if(s1.charAt(m-1)==s2.charAt(n-1)){
-            dp[m][n]=solve(s1,s2,m-1,n-1);
-        }
-        else{
-            int insert=1+solve(s1,s2,m,n-1);
-            int delete=1+solve(s1,s2,m-1,n);
-            int replace=1+solve(s1,s2,m-1,n-1);
+                else if(s1.charAt(i-1)==s2.charAt(j-1)){
+                    t[i][j]=t[i-1][j-1];
+                }
+                else{
+                    t[i][j]=1+Math.min(Math.min(t[i][j-1],t[i-1][j]),t[i-1][j-1]);
+                }
 
-            return dp[m][n]=Math.min(Math.min(insert,delete),replace);
+            }
         }
-        return dp[m][n];
+        return t[m][n];
     }
 }

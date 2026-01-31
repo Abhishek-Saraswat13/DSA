@@ -1,23 +1,36 @@
 class Solution {
     public int trap(int[] h) {
-        int ans=0;
         int n=h.length;
-        int l=0,r=n-1;
-        int lmax=0,rmax=0;
 
-        while(l<r){
-            lmax=Math.max(lmax,h[l]);
-            rmax=Math.max(rmax,h[r]);
+        int[] lmax=getlmax(h,n);
+        int[] rmax=getrmax(h,n);
 
-            if(lmax<rmax){
-                ans+=lmax-h[l];
-                l++;
+        int sum=0;
+
+        for(int i=0;i<n;i++){
+            int hgt=Math.min(lmax[i],rmax[i])-h[i];
+            sum+=hgt;
         }
-            else{
-                ans+=rmax-h[r];
-                r--;
-            }
+        return sum;
+    }
+    public int[] getlmax(int[] h,int n){
+        int[] lmax=new int[n];
+
+        lmax[0]=h[0];
+
+        for(int i=1;i<n;i++){
+            lmax[i]=Math.max(lmax[i-1],h[i]);
         }
-    return ans;
+        return lmax;
+    }
+    public int[] getrmax(int[] h,int n){
+        int[] rmax=new int[n];
+
+        rmax[n-1]=h[n-1];
+
+        for(int i=n-2;i>=0;i--){
+            rmax[i]=Math.max(rmax[i+1],h[i]);
+        }
+        return rmax;
     }
 }

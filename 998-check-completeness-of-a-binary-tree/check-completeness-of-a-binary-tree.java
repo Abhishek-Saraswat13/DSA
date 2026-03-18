@@ -14,28 +14,23 @@
  * }
  */
 class Solution {
+    public int count(TreeNode root){
+        if(root==null) return 0;
+
+        return 1+count(root.left)+count(root.right);
+    }
+    public boolean dfs(TreeNode root,int i,int totalnodes){
+        if(root==null) return true;
+
+        if(i>totalnodes) return false;
+
+        return dfs(root.left,2*i,totalnodes) && dfs(root.right,2*i+1,totalnodes);
+    }
     public boolean isCompleteTree(TreeNode root) {
-        if(root==null) return false;
+        //using dfs
 
-        Queue<TreeNode> q=new LinkedList<>();
-        q.offer(root);
-
-        boolean past=false;
-
-        while(!q.isEmpty()){
-            TreeNode node=q.poll();
-
-            if(node==null){
-                past=true;
-            }
-            else{
-                if(past==true) return false;
-                q.offer(node.left);
-                q.offer(node.right);
-
-            }
-        }
-
-        return true;
+        int totalnodes=count(root);
+        int i=1;
+        return dfs(root,i,totalnodes);
     }
 }

@@ -15,30 +15,17 @@
  */
 class Solution {
     public int minDepth(TreeNode root) {
-        if(root==null) return 0;
-        Queue<TreeNode> q=new LinkedList<>();
+        if (root == null) return 0;
 
-        q.offer(root);
-        int d=1;
-        while(!q.isEmpty()){
-            int n=q.size();
-            while(n-->0){
-                TreeNode temp=q.poll();
-
-                if(temp.left==null && temp.right==null){
-                    return d;
-                }
-                if(temp.left!=null){
-                    q.offer(temp.left);
-                }
-                if(temp.right!=null){
-                    q.offer(temp.right);
-                }
-
-            }
-            d++;
+        // If one child is null, ignore it
+        if (root.left == null) {
+            return 1 + minDepth(root.right);
         }
-        return -1;
+        if (root.right == null) {
+            return 1 + minDepth(root.left);
+        }
 
+        // If both children exist
+        return 1 + Math.min(minDepth(root.left), minDepth(root.right));
     }
 }

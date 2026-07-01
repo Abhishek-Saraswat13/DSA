@@ -1,30 +1,66 @@
 class Solution {
+
     public int numMatchingSubseq(String s, String[] words) {
-        int c=0;
-        Map<String,Integer> map=new HashMap<>();
 
-        for(String str:words){
-            map.put(str,map.getOrDefault(str,0)+1);
+        List<Integer>[] pos = new ArrayList[26];
+
+        for (int i = 0; i < 26; i++) {
+            pos[i] = new ArrayList<>();
         }
 
-        for(Map.Entry<String,Integer> entry:map.entrySet()){
-            String key=entry.getKey();
-            if(solve(key,s)){
-                c+=entry.getValue();
+        // Store indices of each character
+        for (int i = 0; i < s.length(); i++) {
+            pos[s.charAt(i) - 'a'].add(i);
+        }
+
+        int count = 0;
+
+        for (String word : words) {
+            if (isSubsequence(word, pos)) {
+                count++;
             }
         }
-        return c;
-        
+
+        return count;
     }
-    public boolean solve(String word,String s){
-        int i = 0, j = 0;
 
-        while (i < word.length() && j < s.length()) {
-            if (word.charAt(i) == s.charAt(j)) {
-                i++;
-            }
-            j++;
+    private boolean isSubsequence(String word, List<Integer>[] pos) {
+
+        int prev = -1;
+
+        for (char ch : word.toCharArray()) {
+
+            List<Integer> list = pos[ch - 'a'];
+
+            if (list.isEmpty())
+                return false;
+
+            int index = upperBound(list, prev);
+
+            if (index == list.size())
+                return false;
+
+            prev = list.get(index);
         }
-        return i==word.length();
+
+        return true;
+    }
+
+    private int upperBound(List<Integer> list, int target) {
+
+        int low = 0;
+        int high = list.size();
+
+        while (low < high) {
+
+            int mid = low + (high - low) / 2;
+
+            if (list.get(mid) <= target)
+                low = mid + 1;
+            else
+                high = mid;
+        }
+
+        return low;
     }
 }

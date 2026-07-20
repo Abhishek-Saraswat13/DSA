@@ -1,16 +1,15 @@
 class Solution {
     public int arithmeticTriplets(int[] nums, int diff) {
-        int c=0;
-        int n=nums.length;
-        for(int i=0;i<n;i++){
-            for(int j=i+1;j<n;j++){
-                for(int k=j+1;k<n;k++){
-                    if(nums[j]-nums[i]==diff && nums[k]-nums[j]==diff){
-                        c++;
-                    }
-                }
+        int counter = 0;
+        Set<Integer> numSet = new HashSet<>();
+        for (int num : nums) {
+            numSet.add(num);
+        }
+        for (int num : nums) {
+            if (numSet.contains(num + diff) && numSet.contains(num + 2 * diff)) {
+                counter++;
             }
         }
-        return c;
+        return counter;
     }
 }
